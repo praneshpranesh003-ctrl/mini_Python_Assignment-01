@@ -1,0 +1,128 @@
+import google.generativeai as genai
+from google.colab import userdata
+
+# Configure API
+genai.configure(api_key=userdata.get("GEMINI_API_KEYS"))
+
+
+# KNOWLEDGE BASE
+
+knowledge_base = """
+Company: Spartanes D Luffy Fitness Center
+
+=== Membership & Services ===
+
+Q: What are your working hours?
+A: We are open Monday to Saturday from 5:00 AM to 10:00 PM and Sunday from 6:00 AM to 8:00 PM.
+
+Q: Where is Spartanes D Luffy Fitness Center located?
+A: We are located near the City Bus Stand, Main Road, Bengaluru.
+
+Q: What membership plans do you offer?
+A: We offer Monthly, Quarterly, Half-Yearly, and Annual membership plans.
+
+Q: How much does the monthly membership cost?
+A: The monthly membership fee is ₹1,500.
+
+Q: Do you offer a free trial?
+A: Yes. Every new customer gets one free trial session.
+
+Q: How can I join the fitness center?
+A: Visit our reception with a valid ID proof and complete the registration.
+
+Q: Do you provide personal trainers?
+A: Yes. Certified personal trainers are available for an additional fee.
+
+Q: How much does personal training cost?
+A: Personal training starts from ₹3,000 per month.
+
+Q: Do you offer group fitness classes?
+A: Yes. We offer Yoga, Zumba, HIIT, Cardio, and Strength Training classes.
+
+Q: Can beginners join the gym?
+A: Yes. Beginners are welcome and receive a free fitness assessment.
+
+Q: Do you have locker facilities?
+A: Yes. Lockers are available for all members.
+
+Q: Do you have shower facilities?
+A: Yes. Clean shower and changing rooms are available.
+
+Q: Is parking available?
+A: Yes. Free parking is available.
+
+Q: What payment methods do you accept?
+A: We accept Cash, UPI, Credit Cards, Debit Cards, and Net Banking.
+
+Q: Can I freeze my membership?
+A: Yes. Membership can be frozen for up to one month with prior approval.
+
+Q: Can I cancel my membership?
+A: Yes. Visit the reception and submit a cancellation request.
+
+Q: Can I bring a guest?
+A: Yes. Members can bring one guest by purchasing a guest pass.
+
+Q: What equipment is available?
+A: We have treadmills, exercise bikes, rowing machines, free weights, squat racks, benches, and resistance machines.
+
+Q: Do you provide diet plans?
+A: Yes. Personalized diet plans are available from our certified fitness coaches.
+
+Q: How can I contact customer support?
+A: Call us at 9876543210 or email support@spartanesdluffyfitness.com.
+
+Contact Number: 9876543210
+Email: support@spartanesdluffyfitness.com
+"""
+
+# ===========================
+# SYSTEM INSTRUCTION
+# ===========================
+
+system_instruction = f"""
+You are the customer support assistant for Spartanes D Luffy Fitness Center.
+
+Follow these rules strictly:
+
+1. Answer ONLY using the knowledge base below.
+2. If the answer is not available in the knowledge base, reply exactly:
+"I'm sorry, I don't have information about that. Please contact our support team at 9876543210 or email support@spartanesdluffyfitness.com."
+3. Be polite and professional.
+
+========== KNOWLEDGE BASE ==========
+
+{knowledge_base}
+"""
+
+
+# MODEL
+
+model = genai.GenerativeModel(
+    model_name="gemini-2.5-flash-lite",
+    system_instruction=system_instruction
+)
+
+# Start chat session
+chat = model.start_chat(history=[])
+
+print("===== Spartanes D Luffy Fitness Center FAQ Chatbot =====")
+print("Type 'quit' to exit.\n")
+
+# CHAT LOOP
+while True:
+
+    user_input = input("You: ")
+
+    if user_input.lower() in ["quit", "exit", "bye"]:
+        print("Bot: Goodbye! Have a great day.")
+        break
+
+    response = chat.send_message(
+        user_input,
+        generation_config={
+            "temperature": 0.2
+        }
+    )
+
+    print(f"Bot: {response.text}\n")
