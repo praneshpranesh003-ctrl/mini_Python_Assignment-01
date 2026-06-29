@@ -75,10 +75,7 @@ A: Call us at 9876543210 or email support@spartanesdluffyfitness.com.
 Contact Number: 9876543210
 Email: support@spartanesdluffyfitness.com
 """
-
-# ===========================
 # SYSTEM INSTRUCTION
-# ===========================
 
 system_instruction = f"""
 You are the customer support assistant for Spartanes D Luffy Fitness Center.
